@@ -77,10 +77,27 @@ const addQuote = () => {
     const newQuote = document.getElementById("newQuoteText").value.trim();
     const newCategory = document.getElementById("newQuoteCategory").value.trim();
     if (!newQuote || !newCategory) return alert("Please fill in both fields.");
-    quotes.push({ text: newQuote, category: newCategory });
+    const quoteObj = { text: newQuote, category: newCategory };
+    quotes.push(quoteObj);
     saveQuotes();
     populateCategories();
+    sendQuoteToServer(quoteObj);
     alert("Quote added successfully!");
+};
+
+const sendQuoteToServer = async (quote) => {
+    try {
+        await fetch(serverURL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(quote)
+        });
+        console.log("Quote sent to server.");
+    } catch (error) {
+        console.error("Failed to send quote to server.", error);
+    }
 };
 
 // === Sync with Server Simulation ===
