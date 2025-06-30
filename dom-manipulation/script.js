@@ -86,14 +86,7 @@ const addQuote = () => {
 // === Sync with Server Simulation ===
 const syncWithServer = async () => {
     try {
-        const res = await fetch(serverURL);
-        const serverData = await res.json();
-
-        // Simulate conversion from mock data
-        const serverQuotes = serverData.slice(0, 5).map(post => ({
-            text: post.title,
-            category: "Synced"
-        }));
+        const serverQuotes = await fetchQuotesFromServer();
 
         // Conflict resolution: overwrite local if server quote not already present
         let newQuotes = serverQuotes.filter(sq => !quotes.some(lq => lq.text === sq.text));
@@ -107,6 +100,15 @@ const syncWithServer = async () => {
         console.error("Failed to sync from server", err);
     }
 };
+
+function fetchQuotesFromServer() {
+    return fetch(serverURL)
+        .then(res => res.json())
+        .then(serverData => serverData.slice(0, 5).map(post => ({
+            text: post.title,
+            category: "Synced"
+        })));
+}
 
 // Run initializers
 quoteBtn.addEventListener("click", showRandomQuote);
