@@ -100,12 +100,9 @@ const sendQuoteToServer = async (quote) => {
     }
 };
 
-// === Sync with Server Simulation ===
-const syncWithServer = async () => {
+const syncQuotes = async () => {
     try {
         const serverQuotes = await fetchQuotesFromServer();
-
-        // Conflict resolution: overwrite local if server quote not already present
         let newQuotes = serverQuotes.filter(sq => !quotes.some(lq => lq.text === sq.text));
         if (newQuotes.length > 0) {
             quotes.push(...newQuotes);
@@ -135,4 +132,4 @@ populateCategories();
 showRandomQuote();
 
 // Sync every 30 seconds
-setInterval(syncWithServer, 30000);
+setInterval(syncQuotes, 30000);
