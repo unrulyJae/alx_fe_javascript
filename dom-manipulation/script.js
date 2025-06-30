@@ -107,7 +107,7 @@ const syncQuotes = async () => {
         if (newQuotes.length > 0) {
             quotes.push(...newQuotes);
             saveQuotes();
-            alert("New quotes were synced from the server.");
+            alert("Quotes synced with server!");
             populateCategories();
         }
     } catch (err) {
